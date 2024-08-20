@@ -7,11 +7,11 @@
 package main
 
 import (
-	"github.com/go-kratos/kratos-layout/internal/biz"
-	"github.com/go-kratos/kratos-layout/internal/conf"
-	"github.com/go-kratos/kratos-layout/internal/data"
-	"github.com/go-kratos/kratos-layout/internal/server"
-	"github.com/go-kratos/kratos-layout/internal/service"
+	"github.com/ofavor/kratos-layout/internal/biz"
+	"github.com/ofavor/kratos-layout/internal/conf"
+	"github.com/ofavor/kratos-layout/internal/data"
+	"github.com/ofavor/kratos-layout/internal/server"
+	"github.com/ofavor/kratos-layout/internal/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 )
