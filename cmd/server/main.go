@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/ofavor/kratos-layout/internal/conf"
+	"github.com/ofavor/kratos-layout/internal/iface"
+	"github.com/ofavor/kratos-layout/internal/infra"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
@@ -33,8 +35,8 @@ func init() {
 	flag.StringVar(&flagconf, "conf", "../../configs", "config path, eg: -conf config.yaml")
 }
 
-func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
-	return kratos.New(
+func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, eh *iface.EventHandler, infra *infra.Infra) *kratos.App {
+	app := kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),
 		kratos.Version(Version),
@@ -45,6 +47,9 @@ func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
 			hs,
 		),
 	)
+	infra.Initialize()
+	eh.Initialize()
+	return app
 }
 
 func main() {
@@ -74,7 +79,7 @@ func main() {
 		panic(err)
 	}
 
-	app, cleanup, err := wireApp(bc.Server, bc.Data, logger)
+	app, cleanup, err := wireApp(bc.Server, bc.Components, logger)
 	if err != nil {
 		panic(err)
 	}

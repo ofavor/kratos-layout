@@ -7,7 +7,7 @@ import "google/protobuf/duration.proto";
 
 message Bootstrap {
   Server server = 1;
-  Data data = 2;
+  Components components = 2;
 }
 
 message Server {
@@ -25,17 +25,33 @@ message Server {
   GRPC grpc = 2;
 }
 
-message Data {
+message Components {
   message Database {
     string driver = 1;
-    string source = 2;
+    string dns = 2;
+    string enc_key = 3;
+    bool debug = 4;
   }
   message Redis {
     string network = 1;
     string addr = 2;
-    google.protobuf.Duration read_timeout = 3;
-    google.protobuf.Duration write_timeout = 4;
+    string password = 3;
+    int32 db = 4;
+    string prefix = 5;
+    // google.protobuf.Duration read_timeout = 3;
+    // google.protobuf.Duration write_timeout = 4;
   }
+  message Kafka {
+    repeated string brokers = 1;
+  }
+  message Event {
+    string type = 1;
+    string group = 2;
+    int64 buffer_size = 3;
+  }
+
   Database database = 1;
   Redis redis = 2;
+  Kafka kafka = 3;
+  Event event = 4;
 }

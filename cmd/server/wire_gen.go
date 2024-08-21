@@ -7,13 +7,13 @@
 package main
 
 import (
-	"github.com/ofavor/kratos-layout/internal/biz"
-	"github.com/ofavor/kratos-layout/internal/conf"
-	"github.com/ofavor/kratos-layout/internal/data"
-	"github.com/ofavor/kratos-layout/internal/server"
-	"github.com/ofavor/kratos-layout/internal/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/ofavor/kratos-layout/internal/app"
+	"github.com/ofavor/kratos-layout/internal/conf"
+	"github.com/ofavor/kratos-layout/internal/iface"
+	"github.com/ofavor/kratos-layout/internal/infra"
+	"github.com/ofavor/kratos-layout/internal/infra/repo"
 )
 
 import (
@@ -23,18 +23,18 @@ import (
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	dataData, cleanup, err := data.NewData(confData, logger)
-	if err != nil {
-		return nil, nil, err
-	}
-	greeterRepo := data.NewGreeterRepo(dataData, logger)
-	greeterUsecase := biz.NewGreeterUsecase(greeterRepo, logger)
-	greeterService := service.NewGreeterService(greeterUsecase)
-	grpcServer := server.NewGRPCServer(confServer, greeterService, logger)
-	httpServer := server.NewHTTPServer(confServer, greeterService, logger)
-	app := newApp(logger, grpcServer, httpServer)
-	return app, func() {
-		cleanup()
+func wireApp(server *conf.Server, components *conf.Components, logger log.Logger) (*kratos.App, func(), error) {
+	database := infra.NewDatabase(components)
+	cache := infra.NewCache(components)
+	eventBus := infra.NewEvent(components)
+	greeterRepo := repo.NewGreeterRepo(database)
+	infraInfra := infra.NewInfra(database, cache, eventBus, greeterRepo)
+	greeterAppService := app.NewGreeterAppService(infraInfra, logger)
+	grpcServer := iface.NewGRPCServer(server, greeterAppService, logger)
+	httpServer := iface.NewHTTPServer(server, greeterAppService, logger)
+	myEventAppService := app.NewMyEventAppService(logger)
+	eventHandler := iface.NewEventHandler(infraInfra, myEventAppService, logger)
+	kratosApp := newApp(logger, grpcServer, httpServer, eventHandler, infraInfra)
+	return kratosApp, func() {
 	}, nil
 }

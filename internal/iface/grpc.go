@@ -1,9 +1,9 @@
-package server
+package iface
 
 import (
 	v1 "github.com/ofavor/kratos-layout/api/helloworld/v1"
+	"github.com/ofavor/kratos-layout/internal/app"
 	"github.com/ofavor/kratos-layout/internal/conf"
-	"github.com/ofavor/kratos-layout/internal/service"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
@@ -11,7 +11,7 @@ import (
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Server, greeter *service.GreeterService, logger log.Logger) *grpc.Server {
+func NewGRPCServer(c *conf.Server, greeter *app.GreeterAppService, logger log.Logger) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
