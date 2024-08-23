@@ -1,0 +1,2 @@
+etcd:
+  endpoints: ${ETCD_ENDPOINTS:127.0.0.1:2379} # splitted by ','

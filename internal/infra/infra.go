@@ -1,6 +1,8 @@
 package infra
 
 import (
+	"strings"
+
 	"github.com/google/wire"
 	"github.com/ofavor/ddd-go/pkg/cache"
 	caredis "github.com/ofavor/ddd-go/pkg/cache/redis"
@@ -28,7 +30,7 @@ type Infra struct {
 }
 
 func NewDatabase(c *conf.Components) db.Database {
-	return dbgorm.NewDatabase(c.Database.Driver, c.Database.Dns, c.Database.EncKey, c.Database.Debug)
+	return dbgorm.NewDatabase(c.Database.Driver, c.Database.Dns, c.Database.EncKey, strings.ToLower(c.Database.Debug) == "true")
 }
 
 func NewCache(c *conf.Components) cache.Cache {

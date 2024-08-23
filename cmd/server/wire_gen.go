@@ -14,6 +14,7 @@ import (
 	"github.com/ofavor/kratos-layout/internal/iface"
 	"github.com/ofavor/kratos-layout/internal/infra"
 	"github.com/ofavor/kratos-layout/internal/infra/repo"
+	"go.opentelemetry.io/otel/sdk/trace"
 )
 
 import (
@@ -23,18 +24,19 @@ import (
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(server *conf.Server, components *conf.Components, logger log.Logger) (*kratos.App, func(), error) {
+func wireApp(server *conf.Server, registry *conf.Registry, components *conf.Components, auth *conf.Auth, logger log.Logger, tracerProvider *trace.TracerProvider) (*kratos.App, func(), error) {
 	database := infra.NewDatabase(components)
 	cache := infra.NewCache(components)
 	eventBus := infra.NewEvent(components)
 	greeterRepo := repo.NewGreeterRepo(database)
 	infraInfra := infra.NewInfra(database, cache, eventBus, greeterRepo)
 	greeterAppService := app.NewGreeterAppService(infraInfra, logger)
-	grpcServer := iface.NewGRPCServer(server, greeterAppService, logger)
-	httpServer := iface.NewHTTPServer(server, greeterAppService, logger)
+	grpcServer := iface.NewGRPCServer(server, auth, logger, tracerProvider, greeterAppService)
+	httpServer := iface.NewHTTPServer(server, auth, logger, tracerProvider, greeterAppService)
+	registrar := iface.NewRegistrar(registry)
 	myEventAppService := app.NewMyEventAppService(logger)
 	eventHandler := iface.NewEventHandler(infraInfra, myEventAppService, logger)
-	kratosApp := newApp(logger, grpcServer, httpServer, eventHandler, infraInfra)
+	kratosApp := newApp(logger, grpcServer, httpServer, registrar, eventHandler, infraInfra)
 	return kratosApp, func() {
 	}, nil
 }

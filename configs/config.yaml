@@ -1,18 +1,23 @@
+trace:
+  endpoint: ${TRACE_ENDPOINT:http://127.0.0.1:14268/api/traces}
 server:
   http:
-    addr: 0.0.0.0:8000
+    addr: ${SERVER_HTTP_ADDR:0.0.0.0:8000}
     timeout: 1s
   grpc:
-    addr: 0.0.0.0:9000
+    addr: ${SERVER_GRPC_ADDR:0.0.0.0:9000}
     timeout: 1s
+auth:
+  key: ${AUTH_KEY:abcdefg}
 components:
   database:
-    driver: mysql
-    dns: root:root@tcp(127.0.0.1:3306)/dddgo?parseTime=True&loc=Local
-    debug: true
+    driver: ${DATABASE_DRIVER:mysql}
+    dns: ${DATABASE_DNS:root:root@tcp(127.0.0.1:3306)/dddgo?parseTime=True&loc=Local}
+    debug: ${DATABASE_DEBUG:false}
   redis:
-    addr: 127.0.0.1:6379
-    db: 0
+    addr: ${REDIS_ADDR:127.0.0.1:6379}
+    db: ${REDIS_DB:0}
   event:
-    type: memory
-    bufferSize: 100
+    type: ${EVENT_TYPE:memory}
+    bufferSize: ${EVENT_BUFFER_SIZE:100}
+

@@ -7,14 +7,20 @@ import (
 	"github.com/ofavor/kratos-layout/internal/conf"
 	"github.com/ofavor/kratos-layout/internal/iface"
 	"github.com/ofavor/kratos-layout/internal/infra"
+	"go.opentelemetry.io/otel/exporters/jaeger"
+	"go.opentelemetry.io/otel/sdk/resource"
+	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
+	"github.com/go-kratos/kratos/v2/config/env"
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
+	"github.com/go-kratos/kratos/v2/registry"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	tracesdk "go.opentelemetry.io/otel/sdk/trace"
 
 	_ "go.uber.org/automaxprocs"
 )
@@ -35,7 +41,7 @@ func init() {
 	flag.StringVar(&flagconf, "conf", "../../configs", "config path, eg: -conf config.yaml")
 }
 
-func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, eh *iface.EventHandler, infra *infra.Infra) *kratos.App {
+func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, rr registry.Registrar, eh *iface.EventHandler, infra *infra.Infra) *kratos.App {
 	app := kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),
@@ -47,6 +53,7 @@ func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, eh *iface.Event
 			hs,
 		),
 	)
+	kratos.Registrar(rr)
 	infra.Initialize()
 	eh.Initialize()
 	return app
@@ -65,6 +72,7 @@ func main() {
 	)
 	c := config.New(
 		config.WithSource(
+			env.NewSource(""),
 			file.NewSource(flagconf),
 		),
 	)
@@ -79,7 +87,22 @@ func main() {
 		panic(err)
 	}
 
-	app, cleanup, err := wireApp(bc.Server, bc.Components, logger)
+	var rc conf.Registry
+	if err := c.Scan(&rc); err != nil {
+		panic(err)
+	}
+	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(bc.Trace.Endpoint)))
+	if err != nil {
+		panic(err)
+	}
+	tp := tracesdk.NewTracerProvider(
+		tracesdk.WithBatcher(exp),
+		tracesdk.WithResource(resource.NewSchemaless(
+			semconv.ServiceNameKey.String(Name),
+		)),
+	)
+
+	app, cleanup, err := wireApp(bc.Server, &rc, bc.Components, bc.Auth, logger, tp)
 	if err != nil {
 		panic(err)
 	}
