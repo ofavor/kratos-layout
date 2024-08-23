@@ -2,7 +2,7 @@ package iface
 
 import (
 	jwt2 "github.com/golang-jwt/jwt/v5"
-	v1 "github.com/ofavor/kratos-layout/api/helloworld/v1"
+	v1 "github.com/ofavor/kratos-layout/api/gen/helloworld/v1"
 	"github.com/ofavor/kratos-layout/internal/app"
 	"github.com/ofavor/kratos-layout/internal/conf"
 	tracesdk "go.opentelemetry.io/otel/sdk/trace"

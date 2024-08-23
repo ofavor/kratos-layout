@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/ofavor/ddd-go/pkg/event"
-	v1 "github.com/ofavor/kratos-layout/api/helloworld/v1"
+	v1 "github.com/ofavor/kratos-layout/api/gen/helloworld/v1"
 	"github.com/ofavor/kratos-layout/internal/domain/entity"
 	"github.com/ofavor/kratos-layout/internal/domain/repository"
 	"github.com/ofavor/kratos-layout/internal/domain/vo"

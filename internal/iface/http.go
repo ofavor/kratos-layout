@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/gorilla/handlers"
-	v1 "github.com/ofavor/kratos-layout/api/helloworld/v1"
+	v1 "github.com/ofavor/kratos-layout/api/gen/helloworld/v1"
 	"github.com/ofavor/kratos-layout/internal/app"
 	"github.com/ofavor/kratos-layout/internal/conf"
 
@@ -63,7 +63,7 @@ func NewHTTPServer(c *conf.Server, ac *conf.Auth, logger log.Logger, tp *tracesd
 	}
 	srv := http.NewServer(opts...)
 	h := openapiv2.NewHandler()
-	srv.HandlePrefix("/api-docs/", h)
+	srv.HandlePrefix("/q/", h)
 	v1.RegisterGreeterHTTPServer(srv, greeter)
 	return srv
 }
