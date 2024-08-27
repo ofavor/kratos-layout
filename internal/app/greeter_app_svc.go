@@ -9,22 +9,25 @@ import (
 	"github.com/ofavor/kratos-layout/internal/domain/entity"
 	"github.com/ofavor/kratos-layout/internal/domain/repository"
 	"github.com/ofavor/kratos-layout/internal/domain/vo"
-	"github.com/ofavor/kratos-layout/internal/infra"
 )
 
 type GreeterAppService struct {
 	v1.UnimplementedGreeterServer
 
-	repo   repository.GreeterRepo
-	event  event.EventBus
 	logger *log.Helper
+	event  event.EventBus
+	repo   repository.GreeterRepo
 }
 
-func NewGreeterAppService(infra *infra.Infra, logger log.Logger) *GreeterAppService {
+func NewGreeterAppService(
+	logger log.Logger,
+	event event.EventBus,
+	repo repository.GreeterRepo,
+) *GreeterAppService {
 	return &GreeterAppService{
-		repo:   infra.GetGreeterRepo(),
-		event:  infra.GetEvent(),
 		logger: log.NewHelper(logger),
+		event:  event,
+		repo:   repo,
 	}
 }
 

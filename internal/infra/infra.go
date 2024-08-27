@@ -13,20 +13,24 @@ import (
 	evtmem "github.com/ofavor/ddd-go/pkg/event/memory"
 	evtredis "github.com/ofavor/ddd-go/pkg/event/redis"
 	"github.com/ofavor/kratos-layout/internal/conf"
-	"github.com/ofavor/kratos-layout/internal/domain/repository"
 	"github.com/ofavor/kratos-layout/internal/infra/repo"
 	"github.com/ofavor/kratos-layout/internal/infra/repo/dao"
 )
 
 // ProviderSet is infra providers.
-var ProviderSet = wire.NewSet(NewDatabase, NewCache, NewEvent, repo.NewGreeterRepo)
+var ProviderSet = wire.NewSet(
+	NewDatabase,
+	NewCache,
+	NewEvent,
+	NewInfra,
+	repo.NewGreeterRepo,
+	// TODO: add new infrastructure component here
+)
 
 type Infra struct {
 	db    db.Database
 	cache cache.Cache
 	event event.EventBus
-
-	greeterRepo repository.GreeterRepo
 }
 
 func NewDatabase(c *conf.Components) db.Database {
@@ -52,13 +56,11 @@ func NewEvent(c *conf.Components) event.EventBus {
 	return nil
 }
 
-func NewInfra(db db.Database, cache cache.Cache, event event.EventBus, greeterRepo repository.GreeterRepo) *Infra {
+func NewInfra(db db.Database, cache cache.Cache, event event.EventBus) *Infra {
 	return &Infra{
 		db:    db,
 		cache: cache,
 		event: event,
-
-		greeterRepo: greeterRepo,
 	}
 }
 
@@ -70,20 +72,4 @@ func (i *Infra) Initialize() error {
 
 	// TODO
 	return nil
-}
-
-func (i *Infra) GetDatabase() db.Database {
-	return i.db
-}
-
-func (i *Infra) GetCache() cache.Cache {
-	return i.cache
-}
-
-func (i *Infra) GetEvent() event.EventBus {
-	return i.event
-}
-
-func (i *Infra) GetGreeterRepo() repository.GreeterRepo {
-	return i.greeterRepo
 }

@@ -11,7 +11,13 @@ import (
 )
 
 // ProviderSet is server providers.
-var ProviderSet = wire.NewSet(NewRegistrar, NewGRPCServer, NewHTTPServer, NewEventHandler)
+var ProviderSet = wire.NewSet(
+	NewRegistrar,
+	NewGRPCServer,
+	NewHTTPServer,
+	NewEventHandler,
+	// TODO: add new interface service here
+)
 
 func NewRegistrar(conf *conf.Registry) registry.Registrar {
 	client, err := clientv3.New(clientv3.Config{

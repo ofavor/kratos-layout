@@ -25,17 +25,17 @@ import (
 
 // wireApp init kratos application.
 func wireApp(server *conf.Server, registry *conf.Registry, components *conf.Components, auth *conf.Auth, logger log.Logger, tracerProvider *trace.TracerProvider) (*kratos.App, func(), error) {
-	database := infra.NewDatabase(components)
-	cache := infra.NewCache(components)
 	eventBus := infra.NewEvent(components)
+	database := infra.NewDatabase(components)
 	greeterRepo := repo.NewGreeterRepo(database)
-	infraInfra := infra.NewInfra(database, cache, eventBus, greeterRepo)
-	greeterAppService := app.NewGreeterAppService(infraInfra, logger)
-	grpcServer := iface.NewGRPCServer(server, auth, logger, tracerProvider, greeterAppService)
-	httpServer := iface.NewHTTPServer(server, auth, logger, tracerProvider, greeterAppService)
+	greeterAppService := app.NewGreeterAppService(logger, eventBus, greeterRepo)
+	grpcServer := iface.NewGRPCServer(logger, tracerProvider, server, auth, greeterAppService)
+	httpServer := iface.NewHTTPServer(logger, tracerProvider, server, auth, greeterAppService)
 	registrar := iface.NewRegistrar(registry)
 	myEventAppService := app.NewMyEventAppService(logger)
-	eventHandler := iface.NewEventHandler(infraInfra, myEventAppService, logger)
+	eventHandler := iface.NewEventHandler(logger, eventBus, myEventAppService)
+	cache := infra.NewCache(components)
+	infraInfra := infra.NewInfra(database, cache, eventBus)
 	kratosApp := newApp(logger, grpcServer, httpServer, registrar, eventHandler, infraInfra)
 	return kratosApp, func() {
 	}, nil

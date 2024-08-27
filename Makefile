@@ -22,7 +22,8 @@ init:
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 	go install github.com/go-kratos/kratos/cmd/kratos/v2@latest
 	go install github.com/go-kratos/kratos/cmd/protoc-gen-go-http/v2@latest
-	go install github.com/google/gnostic/cmd/protoc-gen-openapi@latest
+# go install github.com/google/gnostic/cmd/protoc-gen-openapi@latest
+	go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
 	go install github.com/google/wire/cmd/wire@latest
 
 .PHONY: config
@@ -41,7 +42,7 @@ api:
  	       --go_out=paths=source_relative:./api/gen \
  	       --go-http_out=paths=source_relative:./api/gen \
  	       --go-grpc_out=paths=source_relative:./api/gen \
-	       --openapi_out=fq_schema_naming=true,default_response=false:. \
+				 --openapiv2_out=json_names_for_fields=false:./api/gen \
 	       $(API_PROTO_FILES)
 
 .PHONY: build

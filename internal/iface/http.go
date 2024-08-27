@@ -8,6 +8,8 @@ import (
 	"github.com/ofavor/kratos-layout/internal/app"
 	"github.com/ofavor/kratos-layout/internal/conf"
 
+	nethttp "net/http"
+
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
 	"github.com/go-kratos/kratos/v2/middleware/logging"
@@ -31,8 +33,73 @@ func newAuthWhiteListMatcher() selector.MatchFunc {
 	}
 }
 
+func responseEncoder(
+	w http.ResponseWriter,
+	r *http.Request,
+	i interface{},
+) error {
+	type response struct {
+		Code     int               `json:"code"`
+		Message  string            `json:"message"`
+		Reason   string            `json:"reason"`
+		Metadata map[string]string `json:"metadata"`
+		Data     interface{}       `json:"data,omitempty"`
+	}
+	// reply := &response{
+	// 	Code:    200,
+	// 	Message: "success",
+	// 	Data:    i,
+	// }
+	// codec, _ := http.CodecForRequest(r, "Accept")
+	// data, err := codec.Marshal(reply)
+	// if err != nil {
+	// 	return err
+	// }
+	// w.Header().Set("Content-Type", "application/json")
+	// w.Write(data)
+	// return nil
+
+	// 解决0值被忽略的问题
+	codec, _ := http.CodecForRequest(r, "Accept")
+	data, err := codec.Marshal(i)
+	if err != nil {
+		return err
+	}
+	w.WriteHeader(nethttp.StatusOK)
+
+	reply := &response{
+		Code:    200,
+		Message: "success",
+	}
+
+	replyData, err := codec.Marshal(reply)
+	if err != nil {
+		return err
+	}
+
+	var newData = make([]byte, 0, len(replyData)+len(data)+8)
+	newData = append(newData, replyData[:len(replyData)-1]...)
+	newData = append(newData, []byte(`,"data":`)...)
+	newData = append(newData, data...)
+	newData = append(newData, '}')
+
+	w.Header().Set("Content-Type", "application/json")
+	_, err = w.Write(newData)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, ac *conf.Auth, logger log.Logger, tp *tracesdk.TracerProvider, greeter *app.GreeterAppService) *http.Server {
+func NewHTTPServer(
+	logger log.Logger,
+	tp *tracesdk.TracerProvider,
+	c *conf.Server,
+	ac *conf.Auth,
+	greeter *app.GreeterAppService,
+	// TODO: add new service here
+) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),

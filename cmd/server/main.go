@@ -69,6 +69,7 @@ func main() {
 		"service.version", Version,
 		"trace.id", tracing.TraceID(),
 		"span.id", tracing.SpanID(),
+		"level", log.LevelWarn,
 	)
 	c := config.New(
 		config.WithSource(

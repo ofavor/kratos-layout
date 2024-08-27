@@ -16,7 +16,14 @@ import (
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Server, ac *conf.Auth, logger log.Logger, tp *tracesdk.TracerProvider, greeter *app.GreeterAppService) *grpc.Server {
+func NewGRPCServer(
+	logger log.Logger,
+	tp *tracesdk.TracerProvider,
+	c *conf.Server,
+	ac *conf.Auth,
+	greeter *app.GreeterAppService,
+	// TODO: add new service here
+) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),

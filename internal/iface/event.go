@@ -4,7 +4,6 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/ofavor/ddd-go/pkg/event"
 	"github.com/ofavor/kratos-layout/internal/app"
-	"github.com/ofavor/kratos-layout/internal/infra"
 )
 
 type EventHandler struct {
@@ -13,10 +12,15 @@ type EventHandler struct {
 	myEvent *app.MyEventAppService
 }
 
-func NewEventHandler(infra *infra.Infra, myEvent *app.MyEventAppService, logger log.Logger) *EventHandler {
+func NewEventHandler(
+	logger log.Logger,
+	bus event.EventBus,
+	myEvent *app.MyEventAppService,
+	// TODO: add new service here
+) *EventHandler {
 	return &EventHandler{
 		logger: log.NewHelper(logger),
-		bus:    infra.GetEvent(),
+		bus:    bus,
 
 		myEvent: myEvent,
 	}
