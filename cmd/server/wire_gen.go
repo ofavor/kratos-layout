@@ -9,11 +9,11 @@ package main
 import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/ofavor/kratos-layout/internal/app"
+	"github.com/ofavor/kratos-layout/internal/application"
 	"github.com/ofavor/kratos-layout/internal/conf"
-	"github.com/ofavor/kratos-layout/internal/iface"
-	"github.com/ofavor/kratos-layout/internal/infra"
-	"github.com/ofavor/kratos-layout/internal/infra/repo"
+	"github.com/ofavor/kratos-layout/internal/infrastructure"
+	"github.com/ofavor/kratos-layout/internal/infrastructure/repo"
+	"github.com/ofavor/kratos-layout/internal/interfaces"
 	"go.opentelemetry.io/otel/sdk/trace"
 )
 
@@ -25,18 +25,18 @@ import (
 
 // wireApp init kratos application.
 func wireApp(server *conf.Server, registry *conf.Registry, components *conf.Components, auth *conf.Auth, logger log.Logger, tracerProvider *trace.TracerProvider) (*kratos.App, func(), error) {
-	eventBus := infra.NewEvent(components)
-	database := infra.NewDatabase(components)
+	eventBus := infrastructure.NewEvent(components)
+	database := infrastructure.NewDatabase(components)
 	greeterRepo := repo.NewGreeterRepo(database)
-	greeterAppService := app.NewGreeterAppService(logger, eventBus, greeterRepo)
-	grpcServer := iface.NewGRPCServer(logger, tracerProvider, server, auth, greeterAppService)
-	httpServer := iface.NewHTTPServer(logger, tracerProvider, server, auth, greeterAppService)
-	registrar := iface.NewRegistrar(registry)
-	myEventAppService := app.NewMyEventAppService(logger)
-	eventHandler := iface.NewEventHandler(logger, eventBus, myEventAppService)
-	cache := infra.NewCache(components)
-	infraInfra := infra.NewInfra(database, cache, eventBus)
-	kratosApp := newApp(logger, grpcServer, httpServer, registrar, eventHandler, infraInfra)
-	return kratosApp, func() {
+	greeterAppService := application.NewGreeterAppService(logger, eventBus, greeterRepo)
+	grpcServer := interfaces.NewGRPCServer(logger, tracerProvider, server, auth, greeterAppService)
+	httpServer := interfaces.NewHTTPServer(logger, tracerProvider, server, auth, greeterAppService)
+	registrar := interfaces.NewRegistrar(registry)
+	myEventAppService := application.NewMyEventAppService(logger)
+	eventHandler := interfaces.NewEventHandler(logger, eventBus, myEventAppService)
+	cache := infrastructure.NewCache(components)
+	infra := infrastructure.NewInfra(database, cache, eventBus)
+	app := newApp(logger, grpcServer, httpServer, registrar, eventHandler, infra)
+	return app, func() {
 	}, nil
 }

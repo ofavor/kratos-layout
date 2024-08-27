@@ -5,7 +5,7 @@ import (
 	repogorm "github.com/ofavor/ddd-go/pkg/repo/gorm"
 	"github.com/ofavor/kratos-layout/internal/domain/entity"
 	"github.com/ofavor/kratos-layout/internal/domain/repository"
-	"github.com/ofavor/kratos-layout/internal/infra/repo/dao"
+	"github.com/ofavor/kratos-layout/internal/infrastructure/repo/dao"
 	"gorm.io/gorm"
 )
 

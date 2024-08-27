@@ -3,7 +3,7 @@ package entity
 import (
 	"github.com/ofavor/ddd-go/pkg/entity"
 	"github.com/ofavor/kratos-layout/internal/domain/vo"
-	"github.com/ofavor/kratos-layout/internal/infra/repo/dao"
+	"github.com/ofavor/kratos-layout/internal/infrastructure/repo/dao"
 )
 
 type HelloworldId uint

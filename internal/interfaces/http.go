@@ -1,11 +1,11 @@
-package iface
+package interfaces
 
 import (
 	"context"
 
 	"github.com/gorilla/handlers"
 	v1 "github.com/ofavor/kratos-layout/api/gen/helloworld/v1"
-	"github.com/ofavor/kratos-layout/internal/app"
+	"github.com/ofavor/kratos-layout/internal/application"
 	"github.com/ofavor/kratos-layout/internal/conf"
 
 	nethttp "net/http"
@@ -97,7 +97,7 @@ func NewHTTPServer(
 	tp *tracesdk.TracerProvider,
 	c *conf.Server,
 	ac *conf.Auth,
-	greeter *app.GreeterAppService,
+	greeter *application.GreeterAppService,
 	// TODO: add new service here
 ) *http.Server {
 	var opts = []http.ServerOption{

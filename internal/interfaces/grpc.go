@@ -1,9 +1,9 @@
-package iface
+package interfaces
 
 import (
 	jwt2 "github.com/golang-jwt/jwt/v5"
 	v1 "github.com/ofavor/kratos-layout/api/gen/helloworld/v1"
-	"github.com/ofavor/kratos-layout/internal/app"
+	"github.com/ofavor/kratos-layout/internal/application"
 	"github.com/ofavor/kratos-layout/internal/conf"
 	tracesdk "go.opentelemetry.io/otel/sdk/trace"
 
@@ -21,7 +21,7 @@ func NewGRPCServer(
 	tp *tracesdk.TracerProvider,
 	c *conf.Server,
 	ac *conf.Auth,
-	greeter *app.GreeterAppService,
+	greeter *application.GreeterAppService,
 	// TODO: add new service here
 ) *grpc.Server {
 	var opts = []grpc.ServerOption{

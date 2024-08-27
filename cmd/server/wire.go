@@ -6,10 +6,10 @@
 package main
 
 import (
-	"github.com/ofavor/kratos-layout/internal/app"
+	"github.com/ofavor/kratos-layout/internal/application"
 	"github.com/ofavor/kratos-layout/internal/conf"
-	"github.com/ofavor/kratos-layout/internal/iface"
-	"github.com/ofavor/kratos-layout/internal/infra"
+	"github.com/ofavor/kratos-layout/internal/infrastructure"
+	"github.com/ofavor/kratos-layout/internal/interfaces"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
@@ -19,5 +19,5 @@ import (
 
 // wireApp init kratos application.
 func wireApp(*conf.Server, *conf.Registry, *conf.Components, *conf.Auth, log.Logger, *tracesdk.TracerProvider) (*kratos.App, func(), error) {
-	panic(wire.Build(infra.ProviderSet, iface.ProviderSet, app.ProviderSet, newApp))
+	panic(wire.Build(infrastructure.ProviderSet, interfaces.ProviderSet, application.ProviderSet, newApp))
 }

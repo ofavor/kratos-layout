@@ -1,4 +1,4 @@
-package infra
+package infrastructure
 
 import (
 	"strings"
@@ -13,8 +13,8 @@ import (
 	evtmem "github.com/ofavor/ddd-go/pkg/event/memory"
 	evtredis "github.com/ofavor/ddd-go/pkg/event/redis"
 	"github.com/ofavor/kratos-layout/internal/conf"
-	"github.com/ofavor/kratos-layout/internal/infra/repo"
-	"github.com/ofavor/kratos-layout/internal/infra/repo/dao"
+	"github.com/ofavor/kratos-layout/internal/infrastructure/repo"
+	"github.com/ofavor/kratos-layout/internal/infrastructure/repo/dao"
 )
 
 // ProviderSet is infra providers.

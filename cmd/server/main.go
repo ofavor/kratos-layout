@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"github.com/ofavor/kratos-layout/internal/conf"
-	"github.com/ofavor/kratos-layout/internal/iface"
-	"github.com/ofavor/kratos-layout/internal/infra"
+	"github.com/ofavor/kratos-layout/internal/infrastructure"
+	"github.com/ofavor/kratos-layout/internal/interfaces"
 	"go.opentelemetry.io/otel/exporters/jaeger"
 	"go.opentelemetry.io/otel/sdk/resource"
 	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
@@ -41,7 +41,14 @@ func init() {
 	flag.StringVar(&flagconf, "conf", "../../configs", "config path, eg: -conf config.yaml")
 }
 
-func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, rr registry.Registrar, eh *iface.EventHandler, infra *infra.Infra) *kratos.App {
+func newApp(
+	logger log.Logger,
+	gs *grpc.Server,
+	hs *http.Server,
+	rr registry.Registrar,
+	eh *interfaces.EventHandler,
+	infra *infrastructure.Infra,
+) *kratos.App {
 	app := kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),

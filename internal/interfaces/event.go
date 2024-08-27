@@ -1,21 +1,21 @@
-package iface
+package interfaces
 
 import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/ofavor/ddd-go/pkg/event"
-	"github.com/ofavor/kratos-layout/internal/app"
+	"github.com/ofavor/kratos-layout/internal/application"
 )
 
 type EventHandler struct {
 	logger  *log.Helper
 	bus     event.EventBus
-	myEvent *app.MyEventAppService
+	myEvent *application.MyEventAppService
 }
 
 func NewEventHandler(
 	logger log.Logger,
 	bus event.EventBus,
-	myEvent *app.MyEventAppService,
+	myEvent *application.MyEventAppService,
 	// TODO: add new service here
 ) *EventHandler {
 	return &EventHandler{
