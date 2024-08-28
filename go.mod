@@ -12,7 +12,7 @@ require (
 	github.com/google/wire v0.6.0
 	github.com/gorilla/handlers v1.5.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.5.0
-	github.com/ofavor/ddd-go v0.0.0-20240821093518-2ea2d43a2359
+	github.com/ofavor/ddd-go v0.0.0-20240828160151-0a174848b9cd
 	go.etcd.io/etcd/client/v3 v3.5.15
 	go.opentelemetry.io/otel v1.28.0
 	go.opentelemetry.io/otel/exporters/jaeger v1.0.0

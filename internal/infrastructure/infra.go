@@ -24,6 +24,7 @@ var ProviderSet = wire.NewSet(
 	NewEvent,
 	NewInfra,
 	repo.NewGreeterRepo,
+	// ddd-go AUTO GENERATE SLOT, DO NOT UPDATE/DELETE new repo
 	// TODO: add new infrastructure component here
 )
 
@@ -68,6 +69,8 @@ func (i *Infra) Initialize() error {
 	// DB
 	i.db.RegisterModels([]interface{}{
 		&dao.GreeterDao{},
+		// ddd-go AUTO GENERATE SLOT, DO NOT UPDATE/DELETE new dao
+		// TODO add new dao model here
 	})
 
 	// TODO
