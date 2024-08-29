@@ -19,11 +19,12 @@ import (
 func NewGRPCServer(
 	logger log.Logger,
 	tp *tracesdk.TracerProvider,
-	c *conf.Server,
-	ac *conf.Auth,
+	bc *conf.Bootstrap,
 	greeter *application.GreeterAppService,
 	// TODO: add new service here
 ) *grpc.Server {
+	c := bc.Server
+	ac := bc.Auth
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),

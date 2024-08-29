@@ -95,11 +95,12 @@ func responseEncoder(
 func NewHTTPServer(
 	logger log.Logger,
 	tp *tracesdk.TracerProvider,
-	c *conf.Server,
-	ac *conf.Auth,
+	bc *conf.Bootstrap,
 	greeter *application.GreeterAppService,
 	// TODO: add new service here
 ) *http.Server {
+	c := bc.Server
+	ac := bc.Auth
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),

@@ -1,3 +1,5 @@
+logging:
+  level: ${LOG_LEVEL:info}
 trace:
   endpoint: ${TRACE_ENDPOINT:http://127.0.0.1:14268/api/traces}
 server:

@@ -32,6 +32,10 @@ func NewGreeterAppService(
 }
 
 func (s *GreeterAppService) SayHello(ctx context.Context, in *v1.HelloRequest) (*v1.HelloReply, error) {
+	s.logger.Debug("This is a debug message")
+	s.logger.Info("This is an info message")
+	s.logger.Warn("This is a warn message")
+	s.logger.Error("This is an error message")
 	gt, err := s.repo.Get(nil, in.Id)
 	if err != nil {
 		return nil, err

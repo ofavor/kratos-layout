@@ -68,16 +68,7 @@ func newApp(
 
 func main() {
 	flag.Parse()
-	logger := log.With(log.NewStdLogger(os.Stdout),
-		"ts", log.DefaultTimestamp,
-		"caller", log.DefaultCaller,
-		"service.id", id,
-		"service.name", Name,
-		"service.version", Version,
-		"trace.id", tracing.TraceID(),
-		"span.id", tracing.SpanID(),
-		"level", log.LevelWarn,
-	)
+
 	c := config.New(
 		config.WithSource(
 			env.NewSource(""),
@@ -99,6 +90,22 @@ func main() {
 	if err := c.Scan(&rc); err != nil {
 		panic(err)
 	}
+
+	// init logger
+	logger := log.NewFilter(
+		log.With(log.NewStdLogger(os.Stdout),
+			"ts", log.DefaultTimestamp,
+			"caller", log.DefaultCaller,
+			"service.id", id,
+			"service.name", Name,
+			"service.version", Version,
+			"trace.id", tracing.TraceID(),
+			"span.id", tracing.SpanID(),
+		),
+		log.FilterLevel(log.ParseLevel(bc.Logging.Level)),
+	)
+
+	// init tracer
 	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(bc.Trace.Endpoint)))
 	if err != nil {
 		panic(err)
@@ -110,7 +117,7 @@ func main() {
 		)),
 	)
 
-	app, cleanup, err := wireApp(bc.Server, &rc, bc.Components, bc.Auth, logger, tp)
+	app, cleanup, err := wireApp(&bc, &rc, logger, tp)
 	if err != nil {
 		panic(err)
 	}

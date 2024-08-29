@@ -24,19 +24,19 @@ import (
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(server *conf.Server, registry *conf.Registry, components *conf.Components, auth *conf.Auth, logger log.Logger, tracerProvider *trace.TracerProvider) (*kratos.App, func(), error) {
-	eventBus := infrastructure.NewEvent(components)
-	database := infrastructure.NewDatabase(components)
+func wireApp(bootstrap *conf.Bootstrap, registry *conf.Registry, logger log.Logger, tracerProvider *trace.TracerProvider) (*kratos.App, func(), error) {
+	eventBus := infrastructure.NewEvent(bootstrap)
+	database := infrastructure.NewDatabase(bootstrap)
 	greeterRepo := repo.NewGreeterRepo(database)
 	greeterAppService := application.NewGreeterAppService(logger, eventBus, greeterRepo)
-	grpcServer := interfaces.NewGRPCServer(logger, tracerProvider, server, auth, greeterAppService)
-	httpServer := interfaces.NewHTTPServer(logger, tracerProvider, server, auth, greeterAppService)
+	server := interfaces.NewGRPCServer(logger, tracerProvider, bootstrap, greeterAppService)
+	httpServer := interfaces.NewHTTPServer(logger, tracerProvider, bootstrap, greeterAppService)
 	registrar := interfaces.NewRegistrar(registry)
 	myEventAppService := application.NewMyEventAppService(logger)
 	eventHandler := interfaces.NewEventHandler(logger, eventBus, myEventAppService)
-	cache := infrastructure.NewCache(components)
+	cache := infrastructure.NewCache(bootstrap)
 	infra := infrastructure.NewInfra(database, cache, eventBus)
-	app := newApp(logger, grpcServer, httpServer, registrar, eventHandler, infra)
+	app := newApp(logger, server, httpServer, registrar, eventHandler, infra)
 	return app, func() {
 	}, nil
 }

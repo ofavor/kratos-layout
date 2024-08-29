@@ -6,13 +6,19 @@ option go_package = "github.com/ofavor/kratos-layout/internal/conf;conf";
 import "google/protobuf/duration.proto";
 
 message Bootstrap {
-  Trace trace = 1;
-  Server server = 2;
-  Components components = 3;
+  Logging logging = 1;
+  Trace trace = 2;
+  Server server = 3;
   Auth auth = 4;
+  Components components = 5;
 }
+
 message Trace {
     string endpoint = 1;
+}
+
+message Logging {
+  string level = 1;
 }
 
 message Server {
@@ -34,19 +40,11 @@ message Auth {
   string key = 1;
 }
 
-message Registry {
-    message Etcd {
-        string endpoints = 1;
-    }
-    Etcd etcd = 1;
-}
-
 message Components {
   message Database {
     string driver = 1;
     string dns = 2;
     string enc_key = 3;
-    string debug = 4;
   }
   message Redis {
     string network = 1;
@@ -70,4 +68,13 @@ message Components {
   Redis redis = 2;
   Kafka kafka = 3;
   Event event = 4;
+}
+
+
+
+message Registry {
+    message Etcd {
+        string endpoints = 1;
+    }
+    Etcd etcd = 1;
 }
