@@ -14,7 +14,7 @@ type GreeterDao struct {
 }
 
 func (d *GreeterDao) TableName() string {
-	return "hw_gretter"
+	return "prefix_greeter"
 }
 
 func (d *GreeterDao) BeforeSave(tx *gorm.DB) error {

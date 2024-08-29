@@ -1,2 +1,5 @@
+type: ${REGISTRY_TYPE:nacos}
 etcd:
   endpoints: ${ETCD_ENDPOINTS:127.0.0.1:2379} # splitted by ','
+nacos:
+  endpoints: ${NACOS_SERVERS:127.0.0.1:8848} # splitted by ','

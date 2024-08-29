@@ -74,7 +74,12 @@ message Components {
 
 message Registry {
     message Etcd {
-        string endpoints = 1;
+      string endpoints = 1;
     }
-    Etcd etcd = 1;
+    message Nacos {
+      string endpoints = 1;
+    }
+    string type = 1;
+    Etcd etcd = 2;
+    Nacos nacos = 3;
 }

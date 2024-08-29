@@ -6,6 +6,5 @@ import (
 
 var ProviderSet = wire.NewSet(
 	NewGreeterAppService,
-	NewMyEventAppService,
 	// TODO: add new service here
 )

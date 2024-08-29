@@ -56,3 +56,7 @@ func (s *GreeterAppService) Create(ctx context.Context, in *v1.CreateRequest) (*
 	s.event.Publish("greeter.created", map[string]interface{}{"id": gt.GetId()})
 	return &v1.CreateResponse{Id: int64(gt.GetId())}, nil
 }
+
+func (s *GreeterAppService) OnGreeterCreated(e *event.Event) {
+	s.logger.Debugf("on greeter created: %s", e)
+}

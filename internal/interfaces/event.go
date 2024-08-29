@@ -7,26 +7,26 @@ import (
 )
 
 type EventHandler struct {
-	logger  *log.Helper
-	bus     event.EventBus
-	myEvent *application.MyEventAppService
+	logger    *log.Helper
+	bus       event.EventBus
+	greAppSvc *application.GreeterAppService
 }
 
 func NewEventHandler(
 	logger log.Logger,
 	bus event.EventBus,
-	myEvent *application.MyEventAppService,
+	gretAppSvc *application.GreeterAppService,
 	// TODO: add new service here
 ) *EventHandler {
 	return &EventHandler{
 		logger: log.NewHelper(logger),
 		bus:    bus,
 
-		myEvent: myEvent,
+		greAppSvc: gretAppSvc,
 	}
 }
 
 func (h *EventHandler) Initialize() error {
-	h.bus.Subscribe("greeter.created", "my-event", h.myEvent.OnGreeterCreated)
+	h.bus.Subscribe("greeter.created", "greeter", h.greAppSvc.OnGreeterCreated)
 	return nil
 }

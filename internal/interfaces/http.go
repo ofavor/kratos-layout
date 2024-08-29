@@ -24,6 +24,7 @@ import (
 
 func newAuthWhiteListMatcher() selector.MatchFunc {
 	whiteList := make(map[string]struct{})
+	whiteList["/helloworld.v1.Greeter/Create"] = struct{}{}
 	whiteList["/helloworld.v1.Greeter/SayHello"] = struct{}{}
 	return func(ctx context.Context, operation string) bool {
 		if _, ok := whiteList[operation]; ok {

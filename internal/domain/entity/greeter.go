@@ -6,11 +6,11 @@ import (
 	"github.com/ofavor/kratos-layout/internal/infrastructure/repo/dao"
 )
 
-type HelloworldId uint
+type GreeterId uint
 
 type Greeter interface {
 	entity.Entity[dao.GreeterDao]
-	GetId() HelloworldId
+	GetId() GreeterId
 	GetName() string
 	GetGreeting() string
 	GetAddress() vo.Address
@@ -48,8 +48,8 @@ func (h *greeter) DAO() *dao.GreeterDao {
 	return h.dao
 }
 
-func (h *greeter) GetId() HelloworldId {
-	return HelloworldId(h.dao.ID)
+func (h *greeter) GetId() GreeterId {
+	return GreeterId(h.dao.ID)
 }
 
 func (h *greeter) GetGreeting() string {

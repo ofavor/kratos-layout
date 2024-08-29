@@ -40,6 +40,13 @@ cd cmd/server
 wire
 ```
 
+OR
+
+```bash
+# $(SERVER) is the name of server name (under cmd/) you want to generate
+make wire SERVER=server
+```
+
 ## Docker
 ```bash
 # build
@@ -53,3 +60,27 @@ docker run --rm -p 8000:8000 -p 9000:9000 -v </path/to/your/configs>:/data/conf 
 http://localhost:8000/q/swagger-ui/
 
 Select a definition on the top right.
+
+## VSCode debug
+
+launch.json
+
+```json
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Server",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "cwd": "${workspaceFolder}",
+      "program": "${workspaceFolder}/cmd/server",
+      "args": ["-conf", "${workspaceFolder}/configs"]
+    }
+  ]
+}
+```

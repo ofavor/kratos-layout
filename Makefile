@@ -45,6 +45,11 @@ api:
 				 --openapiv2_out=json_names_for_fields=false:./api/gen \
 	       $(API_PROTO_FILES)
 
+.PHONY: wire
+# generate internal proto
+wire:
+	cd cmd/$(SERVER) && wire && cd -
+
 .PHONY: build
 # build
 build:
