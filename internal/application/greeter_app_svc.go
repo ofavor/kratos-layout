@@ -31,7 +31,7 @@ func NewGreeterAppService(
 	}
 }
 
-func (s *GreeterAppService) SayHello(ctx context.Context, in *v1.HelloRequest) (*v1.HelloReply, error) {
+func (s *GreeterAppService) SayHello(ctx context.Context, in *v1.HelloRequest) (*v1.HelloResponse, error) {
 	s.logger.Debug("This is a debug message")
 	s.logger.Info("This is an info message")
 	s.logger.Warn("This is a warn message")
@@ -41,7 +41,7 @@ func (s *GreeterAppService) SayHello(ctx context.Context, in *v1.HelloRequest) (
 		return nil, err
 	}
 	g := gt.SayHello()
-	return &v1.HelloReply{Message: g}, nil
+	return &v1.HelloResponse{Message: g}, nil
 }
 
 func (s *GreeterAppService) Create(ctx context.Context, in *v1.CreateRequest) (*v1.CreateResponse, error) {

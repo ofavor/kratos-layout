@@ -25,7 +25,7 @@ const OperationGreeterSayHello = "/helloworld.v1.Greeter/SayHello"
 type GreeterHTTPServer interface {
 	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	// SayHello Sends a greeting
-	SayHello(context.Context, *HelloRequest) (*HelloReply, error)
+	SayHello(context.Context, *HelloRequest) (*HelloResponse, error)
 }
 
 func RegisterGreeterHTTPServer(s *http.Server, srv GreeterHTTPServer) {
@@ -51,7 +51,7 @@ func _Greeter_SayHello0_HTTP_Handler(srv GreeterHTTPServer) func(ctx http.Contex
 		if err != nil {
 			return err
 		}
-		reply := out.(*HelloReply)
+		reply := out.(*HelloResponse)
 		return ctx.Result(200, reply)
 	}
 }
@@ -80,7 +80,7 @@ func _Greeter_Create0_HTTP_Handler(srv GreeterHTTPServer) func(ctx http.Context)
 
 type GreeterHTTPClient interface {
 	Create(ctx context.Context, req *CreateRequest, opts ...http.CallOption) (rsp *CreateResponse, err error)
-	SayHello(ctx context.Context, req *HelloRequest, opts ...http.CallOption) (rsp *HelloReply, err error)
+	SayHello(ctx context.Context, req *HelloRequest, opts ...http.CallOption) (rsp *HelloResponse, err error)
 }
 
 type GreeterHTTPClientImpl struct {
@@ -104,8 +104,8 @@ func (c *GreeterHTTPClientImpl) Create(ctx context.Context, in *CreateRequest, o
 	return &out, nil
 }
 
-func (c *GreeterHTTPClientImpl) SayHello(ctx context.Context, in *HelloRequest, opts ...http.CallOption) (*HelloReply, error) {
-	var out HelloReply
+func (c *GreeterHTTPClientImpl) SayHello(ctx context.Context, in *HelloRequest, opts ...http.CallOption) (*HelloResponse, error) {
+	var out HelloResponse
 	pattern := "/v1/helloworld/greeter/{id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationGreeterSayHello))
