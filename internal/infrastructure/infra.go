@@ -35,24 +35,29 @@ type Infra struct {
 }
 
 func NewDatabase(c *conf.Bootstrap) db.Database {
-	return dbgorm.NewDatabase(c.Components.Database.Driver, c.Components.Database.Dns, c.Components.Database.EncKey, strings.ToLower(c.Logging.Level) == "debug")
+	dc := c.Components.Database
+	return dbgorm.NewDatabase(dc.Driver, dc.Dns, dc.EncKey, strings.ToLower(c.Logging.Level) == "debug")
 }
 
 func NewCache(c *conf.Bootstrap) cache.Cache {
-	return caredis.NewCache(c.Components.Redis.Addr, c.Components.Redis.Password, c.Components.Redis.Db, c.Components.Redis.Prefix)
+	rc := c.Components.Redis
+	return caredis.NewCache(rc.Addr, rc.Password, rc.Db, rc.Prefix)
 }
 
 func NewEvent(c *conf.Bootstrap) event.EventBus {
-	if c.Components.Event == nil {
+	ec := c.Components.Event
+	if ec == nil {
 		return nil
 	}
-	switch c.Components.Event.Type {
+	switch ec.Type {
 	case "kafka":
-		return evtkafka.NewEventBus(c.Components.Kafka.Brokers, c.Components.Event.BufferSize, c.Components.Event.Group)
+		kc := c.Components.Kafka
+		return evtkafka.NewEventBus(kc.Brokers, ec.BufferSize, ec.Group)
 	case "redis":
-		return evtredis.NewEventBus(c.Components.Redis.Addr, c.Components.Redis.Password, c.Components.Redis.Db, c.Components.Event.BufferSize, c.Components.Event.Group)
+		rc := c.Components.Redis
+		return evtredis.NewEventBus(rc.Addr, rc.Password, rc.Db, ec.BufferSize, ec.Group)
 	case "memory":
-		return evtmem.NewEventBus(c.Components.Event.BufferSize)
+		return evtmem.NewEventBus(ec.BufferSize)
 	}
 	return nil
 }

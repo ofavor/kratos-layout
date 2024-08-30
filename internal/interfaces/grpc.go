@@ -11,6 +11,7 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/auth/jwt"
 	"github.com/go-kratos/kratos/v2/middleware/logging"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/middleware/selector"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 )
@@ -28,13 +29,15 @@ func NewGRPCServer(
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
-			logging.Server(logger),
 			tracing.Server(tracing.WithTracerProvider(tp)),
-			jwt.Server(func(token *jwt2.Token) (interface{}, error) {
-				return []byte(ac.Key), nil
-			}, jwt.WithSigningMethod(jwt2.SigningMethodHS256), jwt.WithClaims(func() jwt2.Claims {
-				return &jwt2.MapClaims{}
-			})),
+			logging.Server(logger),
+			selector.Server(
+				jwt.Server(func(token *jwt2.Token) (interface{}, error) {
+					return []byte(ac.Key), nil
+				}, jwt.WithSigningMethod(jwt2.SigningMethodHS256), jwt.WithClaims(func() jwt2.Claims {
+					return &jwt2.MapClaims{}
+				})),
+			).Match(newAuthWhiteListMatcher(bc)).Build(),
 		),
 	}
 	if c.Grpc.Network != "" {

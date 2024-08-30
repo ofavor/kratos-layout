@@ -9,8 +9,9 @@ message Bootstrap {
   Logging logging = 1;
   Trace trace = 2;
   Server server = 3;
-  Auth auth = 4;
-  Components components = 5;
+  Client client = 4;
+  Auth auth = 5;
+  Components components = 6;
 }
 
 message Trace {
@@ -36,8 +37,13 @@ message Server {
   GRPC grpc = 2;
 }
 
+message Client {
+  map<string, string> endpoints = 1;
+}
+
 message Auth {
   string key = 1;
+  repeated string ignores = 2;
 }
 
 message Components {
@@ -52,8 +58,6 @@ message Components {
     string password = 3;
     int32 db = 4;
     string prefix = 5;
-    // google.protobuf.Duration read_timeout = 3;
-    // google.protobuf.Duration write_timeout = 4;
   }
   message Kafka {
     repeated string brokers = 1;

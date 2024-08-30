@@ -1,8 +1,6 @@
 package interfaces
 
 import (
-	"context"
-
 	"github.com/gorilla/handlers"
 	v1 "github.com/ofavor/kratos-layout/api/gen/helloworld/v1"
 	"github.com/ofavor/kratos-layout/internal/application"
@@ -21,18 +19,6 @@ import (
 	jwt2 "github.com/golang-jwt/jwt/v5"
 	tracesdk "go.opentelemetry.io/otel/sdk/trace"
 )
-
-func newAuthWhiteListMatcher() selector.MatchFunc {
-	whiteList := make(map[string]struct{})
-	whiteList["/helloworld.v1.Greeter/Create"] = struct{}{}
-	whiteList["/helloworld.v1.Greeter/SayHello"] = struct{}{}
-	return func(ctx context.Context, operation string) bool {
-		if _, ok := whiteList[operation]; ok {
-			return false
-		}
-		return true
-	}
-}
 
 func responseEncoder(
 	w http.ResponseWriter,
@@ -105,15 +91,15 @@ func NewHTTPServer(
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
-			logging.Server(logger),
 			tracing.Server(tracing.WithTracerProvider(tp)),
+			logging.Server(logger),
 			selector.Server(
 				jwt.Server(func(token *jwt2.Token) (interface{}, error) {
 					return []byte(ac.Key), nil
 				}, jwt.WithSigningMethod(jwt2.SigningMethodHS256), jwt.WithClaims(func() jwt2.Claims {
 					return &jwt2.MapClaims{}
 				})),
-			).Match(newAuthWhiteListMatcher()).Build(),
+			).Match(newAuthWhiteListMatcher(bc)).Build(),
 		),
 		http.Filter(handlers.CORS(
 			handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}),

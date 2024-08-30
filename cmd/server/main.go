@@ -17,7 +17,6 @@ import (
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
-	"github.com/go-kratos/kratos/v2/registry"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	tracesdk "go.opentelemetry.io/otel/sdk/trace"
@@ -45,7 +44,7 @@ func newApp(
 	logger log.Logger,
 	gs *grpc.Server,
 	hs *http.Server,
-	rr registry.Registrar,
+	// rr registry.Registrar,
 	eh *interfaces.EventHandler,
 	infra *infrastructure.Infra,
 ) *kratos.App {
@@ -59,7 +58,7 @@ func newApp(
 			gs,
 			hs,
 		),
-		kratos.Registrar(rr),
+		// kratos.Registrar(rr),
 	)
 
 	// Do initialization

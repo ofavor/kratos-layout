@@ -9,17 +9,22 @@ server:
   grpc:
     addr: ${SERVER_GRPC_ADDR:0.0.0.0:9000}
     timeout: 1s
+client:
+  endpoints:
+    demo1: ${CLIENT_DEMO1:127.0.0.1:9000}
 auth:
   key: ${AUTH_KEY:abcdefg}
+  ignores:
+    - /helloworld.v1.Greeter/Create
+    - /helloworld.v1.Greeter/SayHello
 components:
   database:
     driver: ${DATABASE_DRIVER:mysql}
     dns: ${DATABASE_DNS:root:root@tcp(127.0.0.1:3306)/dddgo?parseTime=True&loc=Local}
-    debug: ${DATABASE_DEBUG:false}
   redis:
     addr: ${REDIS_ADDR:127.0.0.1:6379}
     db: ${REDIS_DB:0}
   event:
     type: ${EVENT_TYPE:memory}
-    bufferSize: ${EVENT_BUFFER_SIZE:100}
+    buffer_size: ${EVENT_BUFFER_SIZE:100}
 

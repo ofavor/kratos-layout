@@ -31,11 +31,10 @@ func wireApp(bootstrap *conf.Bootstrap, registry *conf.Registry, logger log.Logg
 	greeterAppService := application.NewGreeterAppService(logger, eventBus, greeterRepo)
 	server := interfaces.NewGRPCServer(logger, tracerProvider, bootstrap, greeterAppService)
 	httpServer := interfaces.NewHTTPServer(logger, tracerProvider, bootstrap, greeterAppService)
-	registrar := interfaces.NewRegistrar(registry)
 	eventHandler := interfaces.NewEventHandler(logger, eventBus, greeterAppService)
 	cache := infrastructure.NewCache(bootstrap)
 	infra := infrastructure.NewInfra(database, cache, eventBus)
-	app := newApp(logger, server, httpServer, registrar, eventHandler, infra)
+	app := newApp(logger, server, httpServer, eventHandler, infra)
 	return app, func() {
 	}, nil
 }

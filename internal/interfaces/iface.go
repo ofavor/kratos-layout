@@ -1,11 +1,13 @@
 package interfaces
 
 import (
+	"context"
 	"strconv"
 	"strings"
 
 	"github.com/go-kratos/kratos/contrib/registry/etcd/v2"
 	"github.com/go-kratos/kratos/contrib/registry/nacos/v2"
+	"github.com/go-kratos/kratos/v2/middleware/selector"
 	"github.com/go-kratos/kratos/v2/registry"
 	"github.com/google/wire"
 	nacsdkcl "github.com/nacos-group/nacos-sdk-go/clients"
@@ -17,12 +19,27 @@ import (
 
 // ProviderSet is server providers.
 var ProviderSet = wire.NewSet(
-	NewRegistrar,
+	// NewRegistrar,
 	NewGRPCServer,
 	NewHTTPServer,
 	NewEventHandler,
 	// TODO: add new interface service here
 )
+
+func newAuthWhiteListMatcher(bc *conf.Bootstrap) selector.MatchFunc {
+	whiteList := make(map[string]struct{})
+	for _, v := range bc.Auth.Ignores {
+		whiteList[v] = struct{}{}
+	}
+	// whiteList["/helloworld.v1.Greeter/Create"] = struct{}{}
+	// whiteList["/helloworld.v1.Greeter/SayHello"] = struct{}{}
+	return func(ctx context.Context, operation string) bool {
+		if _, ok := whiteList[operation]; ok {
+			return false
+		}
+		return true
+	}
+}
 
 func parseNacosEndpoints(conf string) []nacsdkco.ServerConfig {
 	addrs := strings.Split(conf, ",")
