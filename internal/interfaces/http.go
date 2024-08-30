@@ -130,6 +130,7 @@ func NewHTTPServer(
 	if c.Http.Timeout != nil {
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
+	opts = append(opts, http.ResponseEncoder(responseEncoder))
 	srv := http.NewServer(opts...)
 	h := openapiv2.NewHandler()
 	srv.HandlePrefix("/q/", h)
