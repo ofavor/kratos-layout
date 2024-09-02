@@ -1,13 +1,15 @@
 # Kratos Project Template
 
 ## Install Kratos
-```
+```bash
 go install github.com/go-kratos/kratos/cmd/kratos/v2@latest
 ```
 ## Create a service
-```
+```bash
 # Create a template project
-kratos new server
+kratos new server -r https://github.com/ofavor/kratos-layout.git
+# OR 
+kratos new server -r https://gitee.com/ofavor/kratos-layout.git
 
 cd server
 # Add a proto template
@@ -22,7 +24,7 @@ go build -o ./bin/ ./...
 ./bin/server -conf ./configs
 ```
 ## Generate other auxiliary files by Makefile
-```
+```bash
 # Download and update dependencies
 make init
 # Generate API files (include: pb.go, http, grpc, validate, swagger) by proto file
@@ -31,7 +33,7 @@ make api
 make all
 ```
 ## Automated Initialization (wire)
-```
+```bash
 # install wire
 go get github.com/google/wire/cmd/wire
 
@@ -43,7 +45,7 @@ wire
 OR
 
 ```bash
-# $(SERVER) is the name of server name (under cmd/) you want to generate
+# $(SERVER) is the name of server (under cmd/) you want to generate
 make wire SERVER=server
 ```
 
