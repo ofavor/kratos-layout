@@ -49,7 +49,7 @@ message Auth {
 message Components {
   message Database {
     string driver = 1;
-    string dns = 2;
+    string dsn = 2;
     string enc_key = 3;
   }
   message Redis {

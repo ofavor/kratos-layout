@@ -7,14 +7,14 @@ toolchain go1.22.6
 require (
 	github.com/go-kratos/kratos/contrib/registry/etcd/v2 v2.0.0-20240819025634-57b961cba04c
 	github.com/go-kratos/kratos/contrib/registry/nacos/v2 v2.0.0-20240829015636-da7356560385
-	github.com/go-kratos/kratos/v2 v2.8.0
+	github.com/go-kratos/kratos/v2 v2.8.4
 	github.com/go-kratos/swagger-api v1.0.1
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/wire v0.6.0
 	github.com/gorilla/handlers v1.5.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.5.0
 	github.com/nacos-group/nacos-sdk-go v1.1.4
-	github.com/ofavor/ddd-go v0.0.0-20240828160151-0a174848b9cd
+	github.com/ofavor/ddd-go v0.0.0-20250825085639-0857c087e887
 	go.etcd.io/etcd/client/v3 v3.5.15
 	go.opentelemetry.io/otel v1.28.0
 	go.opentelemetry.io/otel/exporters/jaeger v1.0.0

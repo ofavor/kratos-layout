@@ -103,8 +103,8 @@ github.com/go-kratos/kratos/contrib/registry/etcd/v2 v2.0.0-20240819025634-57b96
 github.com/go-kratos/kratos/contrib/registry/nacos/v2 v2.0.0-20240829015636-da7356560385 h1:jTGQn20okwEnaviHCpmJU7kI476jId+C5S28g4lbnBM=
 github.com/go-kratos/kratos/contrib/registry/nacos/v2 v2.0.0-20240829015636-da7356560385/go.mod h1:gdeVzboxVtvNFJbop55T6tJjzkRdQrjk+9qGJnEH7lg=
 github.com/go-kratos/kratos/v2 v2.0.3/go.mod h1:Hgl0YPry9YyLtwTTfwLfowPKg+YS0dgZ06O5NHqz5hE=
-github.com/go-kratos/kratos/v2 v2.8.0 h1:qr27WRTRrI3o4jzJzNKf4XVVoMYIqnQD+4ws1C46yhM=
-github.com/go-kratos/kratos/v2 v2.8.0/go.mod h1:+Vfe3FzF0d+BfMdajA11jT0rAyJWublRE/seZQNZVxE=
+github.com/go-kratos/kratos/v2 v2.8.4 h1:eIJLE9Qq9WSoKx+Buy2uPyrahtF/lPh+Xf4MTpxhmjs=
+github.com/go-kratos/kratos/v2 v2.8.4/go.mod h1:mq62W2101a5uYyRxe+7IdWubu7gZCGYqSNKwGFiiRcw=
 github.com/go-kratos/swagger-api v1.0.1 h1:zBagw2tWA+icYrRPFqM3jFL60nO743ZiIvuiI6CpV6E=
 github.com/go-kratos/swagger-api v1.0.1/go.mod h1:KMYylgeNaApBgPYIF6kIP1kjGFgI4aDQNbQNBTqaewI=
 github.com/go-logr/logr v1.2.2/go.mod h1:jdQByPbusPIv2/zmleS9BjJVeZ6kBagPoEUsqbVz/1A=
@@ -242,8 +242,8 @@ github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742 h1:Esafd1046DLD
 github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742/go.mod h1:bx2lNnkwVCuqBIxFjflWJWanXIb3RllmbCylyMrvgv0=
 github.com/nacos-group/nacos-sdk-go v1.1.4 h1:qyrZ7HTWM4aeymFfqnbgNRERh7TWuER10pCB7ddRcTY=
 github.com/nacos-group/nacos-sdk-go v1.1.4/go.mod h1:cBv9wy5iObs7khOqov1ERFQrCuTR4ILpgaiaVMxEmGI=
-github.com/ofavor/ddd-go v0.0.0-20240828160151-0a174848b9cd h1:ZetBSMj1tXMTuNF6LNJBarh8WWq/JnljPFFmX7uWgLg=
-github.com/ofavor/ddd-go v0.0.0-20240828160151-0a174848b9cd/go.mod h1:NElozyHbxu5c69H1B4AYhhX2YNnmljUU9ls9dMObKlM=
+github.com/ofavor/ddd-go v0.0.0-20250825085639-0857c087e887 h1:GgADz8ovjobtqg1DjVVpZQekGyOe9uNM/Tb3b1TPsK4=
+github.com/ofavor/ddd-go v0.0.0-20250825085639-0857c087e887/go.mod h1:NElozyHbxu5c69H1B4AYhhX2YNnmljUU9ls9dMObKlM=
 github.com/pierrec/lz4/v4 v4.1.15 h1:MO0/ucJhngq7299dKLwIMtgTfbkoSPF6AoMYDd8Q4q0=
 github.com/pierrec/lz4/v4 v4.1.15/go.mod h1:gZWDp/Ze/IJXGXf23ltt2EXimqmTUXEy0GFuRQyBid4=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=

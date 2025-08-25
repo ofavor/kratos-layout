@@ -3,6 +3,8 @@ package infrastructure
 import (
 	"strings"
 
+	"strconv"
+
 	"github.com/google/wire"
 	"github.com/ofavor/ddd-go/pkg/cache"
 	caredis "github.com/ofavor/ddd-go/pkg/cache/redis"
@@ -15,10 +17,19 @@ import (
 	"github.com/ofavor/kratos-layout/internal/conf"
 	"github.com/ofavor/kratos-layout/internal/infrastructure/repo"
 	"github.com/ofavor/kratos-layout/internal/infrastructure/repo/dao"
+
+	"github.com/go-kratos/kratos/contrib/registry/etcd/v2"
+	"github.com/go-kratos/kratos/contrib/registry/nacos/v2"
+	"github.com/go-kratos/kratos/v2/registry"
+	nacsdkcl "github.com/nacos-group/nacos-sdk-go/clients"
+	nacsdkco "github.com/nacos-group/nacos-sdk-go/common/constant"
+	nacsdkvo "github.com/nacos-group/nacos-sdk-go/vo"
+	etcdsdk "go.etcd.io/etcd/client/v3"
 )
 
 // ProviderSet is infra providers.
 var ProviderSet = wire.NewSet(
+	// NewRegistrar,
 	NewDatabase,
 	NewCache,
 	NewEvent,
@@ -36,7 +47,7 @@ type Infra struct {
 
 func NewDatabase(c *conf.Bootstrap) db.Database {
 	dc := c.Components.Database
-	return dbgorm.NewDatabase(dc.Driver, dc.Dns, dc.EncKey, strings.ToLower(c.Logging.Level) == "debug")
+	return dbgorm.NewDatabase(dc.Driver, dc.Dsn, dc.EncKey, strings.ToLower(c.Logging.Level) == "debug")
 }
 
 func NewCache(c *conf.Bootstrap) cache.Cache {
@@ -80,4 +91,44 @@ func (i *Infra) Initialize() error {
 
 	// TODO
 	return nil
+}
+
+func parseNacosEndpoints(conf string) []nacsdkco.ServerConfig {
+	addrs := strings.Split(conf, ",")
+	ret := make([]nacsdkco.ServerConfig, 0, len(addrs))
+	for _, addr := range addrs {
+		vv := strings.Split(addr, ":")
+		port, _ := strconv.ParseUint(vv[1], 10, 64)
+		ret = append(ret, nacsdkco.ServerConfig{
+			IpAddr: vv[0],
+			Port:   port,
+		})
+	}
+	return ret
+}
+
+func NewRegistrar(conf *conf.Registry) registry.Registrar {
+	switch conf.Type {
+	case "etcd":
+		client, err := etcdsdk.New(etcdsdk.Config{
+			Endpoints: strings.Split(conf.Etcd.Endpoints, ","),
+		})
+		if err != nil {
+			panic(err)
+		}
+		return etcd.New(client)
+	case "nacos":
+		addrs := parseNacosEndpoints(conf.Nacos.Endpoints)
+		client, err := nacsdkcl.NewNamingClient(
+			nacsdkvo.NacosClientParam{
+				ServerConfigs: addrs,
+			},
+		)
+		if err != nil {
+			panic(err)
+		}
+		return nacos.New(client)
+	default:
+		panic("unknown registry type")
+	}
 }
