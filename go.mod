@@ -1,8 +1,6 @@
 module github.com/ofavor/kratos-layout
 
-go 1.21.4
-
-toolchain go1.22.6
+go 1.24
 
 require (
 	github.com/go-kratos/kratos/contrib/registry/etcd/v2 v2.0.0-20240819025634-57b961cba04c
